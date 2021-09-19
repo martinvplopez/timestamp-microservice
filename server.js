@@ -4,6 +4,10 @@
 // init project
 var express = require('express');
 var app = express();
+let dateResult={
+  "unix":0,
+  "utc":""
+};
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -24,22 +28,37 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-app.get("/api/:date",(req,res)=>{
-  let validDate= /^\d{4}-\d{2}-\d{2}$/;
-  let validDateMs=/^\d+$/;
-  let date= req.params.date.toString(); // Date URL parameter
-
-  // Checking the date
-  if(validDate.test(date)){ // Date in yyyy/mm/dd format
-
-  }
-  else if(validDateMs.test(date)){  // Date in yyyy/mm/dd format
-
-  }else{
-    res
-  }
-  console.log(date);
+app.get("/api",(req,res)=>{ // Request if the date is empty
+  let date=Date.now();
+  dateResult.unix=date;
+  dateResult.utc=new Date(date).toUTCString();
+  res.json(dateResult);
 });
+
+app.get("/api/:date",(req,res)=>{
+  const validDateMs=/^\d+$/;
+  let date= req.params.date.toString(); // Date URL parameter
+  console.log(date);
+  if(validDateMs.test(date)){  // Date in ms format
+    date=parseInt(date);
+    let dateStr= new Date(date).toUTCString();
+    dateResult.unix=date;
+    dateResult.utc=dateStr;
+    res.json(dateResult); 
+  }
+  if(isNaN(Date.parse(date))===false){ // Any parseable date
+    //console.log("Como vas a entrar");
+    console.log((new Date(date)).getTime());
+    dateResult.unix=Date.parse(date);
+    dateResult.utc=new Date(dateResult.unix).toUTCString();
+    res.json(dateResult);
+  }
+  else{ // If date isn´t in the formats above it´s an error.
+    res.json({ error : "Invalid Date" });
+  }
+  
+});
+
 
 
 
