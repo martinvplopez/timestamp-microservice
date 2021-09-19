@@ -48,8 +48,9 @@ app.get("/api/:date",(req,res)=>{
   }
   if(isNaN(Date.parse(date))===false){ // Any parseable date
     //console.log("Como vas a entrar");
-    console.log((new Date(date)).getTime());
-    dateResult.unix=Date.parse(date);
+    let test=Date.parse(date)*1000;
+    test=new Date(test);
+    dateResult.unix=test/1000;
     dateResult.utc=new Date(dateResult.unix).toUTCString();
     res.json(dateResult);
   }
