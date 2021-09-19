@@ -26,7 +26,18 @@ app.get("/api/hello", function (req, res) {
 
 app.get("/api/:date",(req,res)=>{
   let validDate= /^\d{4}-\d{2}-\d{2}$/;
-  let date= req.params.date;
+  let validDateMs=/^\d+$/;
+  let date= req.params.date.toString(); // Date URL parameter
+
+  // Checking the date
+  if(validDate.test(date)){ // Date in yyyy/mm/dd format
+
+  }
+  else if(validDateMs.test(date)){  // Date in yyyy/mm/dd format
+
+  }else{
+    res
+  }
   console.log(date);
 });
 
