@@ -34,25 +34,31 @@ app.get("/api",(req,res)=>{ // Request if the date is empty
 });
 
 app.get("/api/:date",(req,res)=>{
-  const validDateMs=/^\d+$/;
   let dateStr= req.params.date; // Date URL parameter
+  let date;
   console.log(dateStr);
-  if(validDateMs.test(dateStr)){  // Date in ms format
-    let date= new Date(parseInt(dateStr));
-    res.json({unix: date.getTime(), utc:date.toUTCString()}); 
+  const validDateMs=/^\d+$/;
+  if(!dateStr){
+    date=Date.now();
+    res.json({unix: date, utc:date.toUTCString()});
+  }else{
+    if(validDateMs.test(dateStr)){  // Date in ms format
+      date= new Date(parseInt(dateStr));
+      res.json({unix: date.getTime(), utc:date.toUTCString()}); 
+    }
+    if(new Date(dateStr).toString()!=="Invalid Date"){ // Any parseable date
+      //console.log("Como vas a entrar");
+      date= new Date(dateStr);
+      res.json({unix:date.getTime(), utc:date.toUTCString()});
+    }
+    else{ // If date isn´t in the formats above it´s an error.
+      res.json({ error : "Invalid Date" });
+    }
   }
-  if(new Date(dateStr).toString()!=="Invalid Date"){ // Any parseable date
-    //console.log("Como vas a entrar");
-    let date= new Date(dateStr);
-    res.json({unix:date.getTime(), utc:date.toUTCString()});
-  }
-  else{ // If date isn´t in the formats above it´s an error.
-    res.json({ error : "Invalid Date" });
-  }
+  
 });
 
 
-console.log(new Date("pepe"));
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT||3000, function () {
