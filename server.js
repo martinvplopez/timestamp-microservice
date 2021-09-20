@@ -4,10 +4,7 @@
 // init project
 var express = require('express');
 var app = express();
-let dateResult={
-  "unix":0,
-  "utc":""
-};
+
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -38,7 +35,7 @@ app.get("/api/:date?",(req,res)=>{
   let date;
   console.log(dateStr);
   const validDateMs=/^\d+$/;
-  if(!dateStr){
+  if(!dateStr){ // Empty string
     date=new Date();
     res.json({unix: date.getTime(), utc:date.toUTCString()});
   }else{
