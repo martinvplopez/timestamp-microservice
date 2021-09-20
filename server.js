@@ -29,39 +29,30 @@ app.get("/api/hello", function (req, res) {
 });
 
 app.get("/api",(req,res)=>{ // Request if the date is empty
-  let date=Date.now();
-  dateResult.unix=date;
-  dateResult.utc=new Date(date).toUTCString();
-  res.json(dateResult);
+  let date=new Date();
+  res.json({unix: date.getTime(), utc:date.toUTCString()});
 });
 
 app.get("/api/:date",(req,res)=>{
   const validDateMs=/^\d+$/;
-  let date= req.params.date.toString(); // Date URL parameter
-  console.log(date);
-  if(validDateMs.test(date)){  // Date in ms format
-    date=parseInt(date);
-    let dateStr= new Date(date).toUTCString();
-    dateResult.unix=date;
-    dateResult.utc=dateStr;
-    res.json(dateResult); 
+  let dateStr= req.params.date; // Date URL parameter
+  console.log(dateStr);
+  if(validDateMs.test(dateStr)){  // Date in ms format
+    let date= new Date(parseInt(dateStr));
+    res.json({unix: date.getTime(), utc:date.toUTCString()}); 
   }
-  if(isNaN(Date.parse(date))===false){ // Any parseable date
+  if(new Date(dateStr).toString()!=="Invalid Date"){ // Any parseable date
     //console.log("Como vas a entrar");
-    let test=Date.parse(date)*1000;
-    test=new Date(test);
-    dateResult.unix=test/1000;
-    dateResult.utc=new Date(dateResult.unix).toUTCString();
-    res.json(dateResult);
+    let date= new Date(dateStr);
+    res.json({unix:date.getTime(), utc:date.toUTCString()});
   }
   else{ // If date isn´t in the formats above it´s an error.
     res.json({ error : "Invalid Date" });
   }
-  
 });
 
 
-
+console.log(new Date("pepe"));
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT||3000, function () {
