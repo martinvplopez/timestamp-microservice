@@ -25,26 +25,21 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-/* app.get("/api",(req,res)=>{ // Request if the date is empty
-  let date=new Date();
-  res.json({unix: date.getTime(), utc:date.toUTCString()});
-}); */
-
+// Endpoint to make the timestamp microservice
 app.get("/api/:date?",(req,res)=>{
   let dateStr= req.params.date; // Date URL parameter
   let date;
   console.log(dateStr);
   const validDateMs=/^\d+$/;
-  if(!dateStr){ // Empty string
+  if(!dateStr){ // No date parameter
     date=new Date();
-    res.json({unix: date.getTime(), utc:date.toUTCString()});
+    res.json({unix: date.getTime(), utc:date.toUTCString()}); 
   }else{
     if(validDateMs.test(dateStr)){  // Date in ms format
       date= new Date(parseInt(dateStr));
       res.json({unix: date.getTime(), utc:date.toUTCString()}); 
     }
     if(new Date(dateStr).toString()!=="Invalid Date"){ // Any parseable date
-      //console.log("Como vas a entrar");
       date= new Date(dateStr);
       res.json({unix:date.getTime(), utc:date.toUTCString()});
     }
