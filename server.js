@@ -39,7 +39,7 @@ app.get("/api/:date?",(req,res)=>{
   console.log(dateStr);
   const validDateMs=/^\d+$/;
   if(!dateStr){
-    date=Date.now();
+    date=new Date();
     res.json({unix: date, utc:date.toUTCString()});
   }else{
     if(validDateMs.test(dateStr)){  // Date in ms format
