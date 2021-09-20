@@ -40,7 +40,7 @@ app.get("/api/:date?",(req,res)=>{
   const validDateMs=/^\d+$/;
   if(!dateStr){
     date=new Date();
-    res.json({unix: date, utc:date.toUTCString()});
+    res.json({unix: date.getTime(), utc:date.toUTCString()});
   }else{
     if(validDateMs.test(dateStr)){  // Date in ms format
       date= new Date(parseInt(dateStr));
