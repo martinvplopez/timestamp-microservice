@@ -33,7 +33,7 @@ app.get("/api/hello", function (req, res) {
   res.json({unix: date.getTime(), utc:date.toUTCString()});
 }); */
 
-app.get("/api/:date",(req,res)=>{
+app.get("/api/:date?",(req,res)=>{
   let dateStr= req.params.date; // Date URL parameter
   let date;
   console.log(dateStr);
@@ -55,7 +55,6 @@ app.get("/api/:date",(req,res)=>{
       res.json({ error : "Invalid Date" });
     }
   }
-  
 });
 
 
